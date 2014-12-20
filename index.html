@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title> Test </title>
+  </head>
+<body>
+
+    <h1> Test Resources Cache </h1>
+    We are using node.js <script> document.write(process.version) </script>
+    and atom-shell <script> document.write(process.versions['atom-shell']) </script>.
+    <p> 
+        <button onclick="openDevTools()"> Open DevTools </button>
+        <button onclick="refresh()"> Refresh </button>
+    </p>
+    <hr />
+
+    <p>
+        Image to load: 
+        <select id="img">
+            <option value="jpg-512.jpg"> jpg 512 x 512 </option>
+            <option value="jpg-1024.jpg"> jpg 1024 x 1024 </option>
+            <option value="bmp-512_32bit_1MB.bmp"> bmp 512 x 512 x 32bit(1MB) </option>
+            <option value="bmp-1024_32bit_4MB.bmp"> bmp 1024 x 1024 x 32bit(4MB) </option>
+        </select>
+    </p>
+    <p>
+        Load Count: <input type="number" id="count" value="10" />
+    </p>
+    <p>
+    <!--span style="font-size:larger"-->
+        <button onclick="load()"> Load </button>
+        <button onclick="loadDifferent()"> Load Diff </button>
+    <!--/--span-->
+    </p>
+
+    <hr />
+
+    Loaded: <span id="loaded"> 0 </span>
+
+    <script>
+        
+        var remote = require('remote');
+        var BrowserWindow = remote.require('browser-window');
+
+        function openDevTools () {    
+            BrowserWindow.getFocusedWindow().openDevTools();
+        }
+
+        function refresh () {
+            BrowserWindow.getFocusedWindow().reloadIgnoringCache();
+        }
+
+        var loaded = 0;
+        var img = document.getElementById('img');
+        var countEL = document.getElementById('count');
+        var loadedEL = document.getElementById('loaded');
+
+        function load (event) {
+            for (var i = 0; i < countEL.value; i++) {
+                var image = document.createElement('img');
+                image.onload = function () {
+                    loaded++;
+                    loadedEL.innerText = loaded;
+                }
+                image.src = 'img/' + img.value + '?ver=' + Math.random();
+                
+                //document.body.appendChild(image);
+            }
+        }
+
+        function loadDifferent () {
+            for (var i = 0; i < 150; i++) {
+                var image = document.createElement('img');
+                image.onload = function () {
+                    loaded++;
+                    loadedEL.innerText = loaded;
+                }
+                //image.src = 'R:/img/bmp-512_32bit_1MB(' + i + ').bmp';
+                image.src = 'R:/img2/(' + i + ').jpg';
+            }
+        }
+
+        //function onKeyDown(event) {
+        //    if (locked) {
+        //        console.error('Already locked, see the call stack please');
+        //        //return;
+        //    }
+        //    else {
+        //        // LOCK !!
+        //        locked = true;
+        //    }
+
+        //    switch (event.which) {
+        //        // key-up
+        //        case 38:
+        //            // += 1;
+        //            value = globalObject.add(value, inputElement.value);
+        //            valueElement.innerText = value;
+
+        //            event.preventDefault();
+        //            event.stopPropagation();
+        //            break;
+
+        //        // key-down
+        //        case 40:
+        //            // -= 1;
+        //            value = globalObject.sub(value, inputElement.value);
+        //            valueElement.innerText = value;
+
+        //            event.preventDefault();
+        //            event.stopPropagation();
+        //            break;
+        //    }
+
+        //    // UNLOCK !!
+        //    locked = false;
+        //}
+
+    </script>
+
+</body>
+</html>
