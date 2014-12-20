@@ -58,23 +58,29 @@
         function load (event) {
             for (var i = 0; i < countEL.value; i++) {
                 var image = document.createElement('img');
-                image.onload = function () {
+                image.onload = (function (image) {
                     loaded++;
                     loadedEL.innerText = loaded;
-                }
+                    document.body.appendChild(image);
+                    window.setTimeout(function () {
+                        image.remove();
+                    }, 1000)
+                }).bind(this, image);
                 image.src = 'img/' + img.value + '?ver=' + Math.random();
-                
-                //document.body.appendChild(image);
             }
         }
 
         function loadDifferent () {
             for (var i = 0; i < 150; i++) {
                 var image = document.createElement('img');
-                image.onload = function () {
+                image.onload = (function (image) {
                     loaded++;
                     loadedEL.innerText = loaded;
-                }
+                    document.body.appendChild(image);
+                    window.setTimeout(function () {
+                        image.remove();
+                    }, 1000)
+                }).bind(this, image);
                 //image.src = 'R:/img/bmp-512_32bit_1MB(' + i + ').bmp';
                 image.src = 'R:/img2/(' + i + ').jpg';
             }
